@@ -13,27 +13,13 @@ import java.util.Optional;
 public class SubjectController {
     private final SubjectService subjectService;
 
-
-    @GetMapping("main")
-    public String getAllSubjects(Model model) {
-        model.addAttribute("subjects", subjectService.getAllSubjects());
-        return "home_test";
-    }
-
+}
 
     @GetMapping("{id}")
     public String getTargetSubject(Model model, @PathVariable Long id) {
-        Subject mainSubject = subjectService.getSubject(id).orElse(null);
-        if (mainSubject == null) {
-            return String.format("redirect:/subject/list/%d", id);
-        }
-        model.addAttribute("target", mainSubject);
-        model.addAttribute("subjects", mainSubject.getChildren());
-
+        model.addAttribute("mainSubject", subjectService.getSubject(id));
         return "test";
     }
-
-
 
     @GetMapping("{id}/divide")
     public String divideTargetSubject(Model model, @PathVariable Long id) {
@@ -46,8 +32,9 @@ public class SubjectController {
         return "test";
     }
 
-    @PostMapping("/list{id}/new")
+    @PostMapping("{id}/new")
     public String newSubjectFromTarget(@PathVariable Long id, SubjectForm subjectForm) {
+        if
         return "redirect:/subject/" + id;
     }
 }
