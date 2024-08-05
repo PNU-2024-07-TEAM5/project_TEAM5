@@ -14,14 +14,20 @@ public class SubjectController {
     private final SubjectService subjectService;
 
 
-    @GetMapping("{id}")
+    @GetMapping("/list{id}")
     public String getTargetSubject(Model model, @PathVariable Long id) {
-        model.addAttribute("mainSubject", subjectService.getSubject(id));
+        Subject mainSubject = subjectService.getSubject(id).orElse(null);
+        if (mainSubject == null) {
+            return String.format("redirect:/subject/list%d", id);
+        }
+        model.addAttribute("parent", mainSubject);
+        model.addAttribute("children", mainSubject.getChildren());
+
         return "test";
     }
 
 
-    @GetMapping("{id}/divide")
+    @GetMapping("/list{id}/divide")
     public String divideTargetSubject(Model model, @PathVariable Long id) {
         Optional<Subject> subject = subjectService.getSubject(id);
         if (subject.isEmpty()) {
@@ -32,9 +38,8 @@ public class SubjectController {
         return "test";
     }
 
-    @PostMapping("{id}/new")
+    @PostMapping("/list{id}/new")
     public String newSubjectFromTarget(@PathVariable Long id, SubjectForm subjectForm) {
-        if
         return "redirect:/subject/" + id;
     }
 }
