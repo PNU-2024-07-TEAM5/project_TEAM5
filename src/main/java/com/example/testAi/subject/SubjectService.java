@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -87,5 +88,9 @@ public class SubjectService {
         //TODO : delete subject
         if (subjectRepository.existsById(id))
             subjectRepository.deleteById(id);
+    }
+
+    Optional<Subject> getSubject(Long id) {
+        return subjectRepository.findById(id);
     }
 }
