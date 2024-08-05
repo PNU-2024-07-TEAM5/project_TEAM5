@@ -37,7 +37,8 @@ out/
 .vscode/
 
 ## Database ##
-./testDB.mv.db
+testDB.mv.db
+testDB.trace.db
 
 ## custom ##
 src/main/resources/application-secret.yml
