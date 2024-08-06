@@ -11,14 +11,24 @@
                 <a href="/home" class="hover:text-gray-200 flex items-center p-3 transition duration-300 ease-in-out transform hover:scale-105 text-xl font-bold">
                     🏠️ 홈
                 </a>
-                <a href="/login" class="hover:text-gray-200 flex items-center p-3 transition duration-300 ease-in-out transform hover:scale-105 text-xl font-bold">
+                <a th:if="${@rq.logout}" href="/member/login" class="hover:text-gray-200 flex items-center p-3 transition duration-300 ease-in-out transform hover:scale-105 text-xl font-bold">
                     👨‍🦱 로그인
                 </a>
-                <a href="/signup" class="hover:text-gray-200 flex items-center p-3 transition duration-300 ease-in-out transform hover:scale-105 text-xl font-bold">
+
+                <a th:if="${@rq.logout}"  href="/member/join" class="hover:text-gray-200 flex items-center p-3 transition duration-300 ease-in-out transform hover:scale-105 text-xl font-bold">
                     ➕ 회원가입
+                </a>
+
+                <a th:if="${@rq.login}" href="/member/me" class="hover:text-gray-200 flex items-center p-3 transition duration-300 ease-in-out transform hover:scale-105 text-xl font-bold">
+                    👨‍🦱 내 정보
+                </a>
+
+                <a th:if="${@rq.login}"  href="/member/logout" class="hover:text-gray-200 flex items-center p-3 transition duration-300 ease-in-out transform hover:scale-105 text-xl font-bold">
+                    ➕ 로그아웃
                 </a>
             </nav>
         </div>
     </header>
-</div>3
+</div>
 </html>
+
