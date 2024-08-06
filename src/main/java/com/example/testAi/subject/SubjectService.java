@@ -27,21 +27,6 @@ public class SubjectService {
         return subjectRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"));
     }
 
-    void addSubjectTO(Long id, String content) {
-        Subject parent = subjectRepository.findById(id).orElse(null);
-        if (parent == null) {
-            return;
-        }
-        Subject subject = new Subject();
-        subject.setSubject(content);
-        subject.setCreatedDate(LocalDateTime.now());
-        subject.setParent(parent);
-        subjectRepository.save(subject);
-
-        parent.getChildren().add(subject);
-        subjectRepository.save(parent);
-    }
-
     // 에러 발생시 빈 리스트 반환
     List<SubjectForm> divide(Long id) {
         //TODO : divide subjects
@@ -88,7 +73,7 @@ public class SubjectService {
             subjectRepository.save(subject);
             parent.getChildren().add(subject);
         }
-            subjectRepository.save(parent);
+        subjectRepository.save(parent);
     }
 
     // 자식들은 cascade로 삭제되므로 부모만 삭제
@@ -98,5 +83,21 @@ public class SubjectService {
             subjectRepository.deleteById(id);
     }
 
+    void add(Long id, String content) {
+        Subject subject = new Subject();
+        subject.setSubject(content);
+        subject.setDescription("사용자가 직접 입력한 내용입니다.");
+        subject.setCreatedDate(LocalDateTime.now());
+
+        if (id != null && subjectRepository.existsById(id)) {
+            Subject parent = subjectRepository.findById(id).orElse(null);
+            subject.setParent(parent);
+            parent.getChildren().add(subject);
+            subjectRepository.save(parent);
+        }
+
+        subjectRepository.save(subject);
+
+    }
 
 }

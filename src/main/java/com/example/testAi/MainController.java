@@ -8,16 +8,24 @@ public class MainController {
 
     @GetMapping("/")
     public String root() {
-        return "todo";
+        return "redirect:/subject/main";
     }
 
     @GetMapping("/todo")
     public String test() {
-        return "todo";
+        return "redirect:/subject/main";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
     @GetMapping("/home")
     public String home() {
-        return "home";
+        return "redirect:/subject/main";
     }
+
+    @GetMapping("/login/sucess")
+    public String sucess() { return "redirect:/subject/main"; }
 }

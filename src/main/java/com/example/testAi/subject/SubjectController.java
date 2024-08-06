@@ -1,9 +1,11 @@
 package com.example.testAi.subject;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -79,6 +81,13 @@ public class SubjectController {
     }
 
 
+    @PostMapping("main/add")
+    public String addSubject(@RequestParam("taskInput") String taskInput) {
+        subjectService.add(null, taskInput);
+        return "redirect:/subject/main";
+    }
+
+
     @GetMapping("{sid}")
     public String getTargetSubjects(Model model, @PathVariable Long sid) {
         if (!subjectFormScope.getPrevStep().equals(ControllerStep.DIVIDE)){
@@ -142,6 +151,12 @@ public class SubjectController {
         Subject target = subjectService.get(subjectFormScope.getRequestedId()).orElse(null);
         subjectService.save(target, selectedForm);
         subjectFormScope.clear();
+        return String.format("redirect:/subject/%d", sid);
+    }
+
+    @PostMapping("{sid}/add")
+    public String addTargetSubject(@RequestParam("taskInput") String taskInput, @PathVariable Long sid) {
+        subjectService.add(sid, taskInput);
         return String.format("redirect:/subject/%d", sid);
     }
 }
