@@ -29,7 +29,7 @@ public class Subject {
     @ManyToOne
     private Subject parent;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     List<Subject> children;
 
     private boolean isDone;

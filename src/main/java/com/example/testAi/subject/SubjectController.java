@@ -1,11 +1,9 @@
 package com.example.testAi.subject;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -87,8 +85,18 @@ public class SubjectController {
         return "redirect:/subject/main";
     }
 
+    @PostMapping("main/delete")
+    public String deleteSubject(@RequestParam("body") String body) {
+        JSONObject jsonObject = new JSONObject(body);
+        jsonObject.getJSONArray("tasks").toList().stream()
+                .map(Objects::toString).map(Long::parseLong)
+                .forEach(subjectService::delete);
 
-    @GetMapping("{sid}")
+        return "redirect:/subject/main";
+    }
+
+
+    @GetMapping("/{sid}")
     public String getTargetSubjects(Model model, @PathVariable Long sid) {
         if (!subjectFormScope.getPrevStep().equals(ControllerStep.DIVIDE)){
             subjectFormScope.clear();
@@ -159,4 +167,30 @@ public class SubjectController {
         subjectService.add(sid, taskInput);
         return String.format("redirect:/subject/%d", sid);
     }
+
+
+    @PostMapping("{sid}/delete")
+    public String deleteTargetSubject(@RequestParam("body") String body, @PathVariable Long sid) {
+        JSONObject jsonObject = new JSONObject(body);
+
+        List<Long> idList = jsonObject.getJSONArray("tasks").toList().stream()
+                .map(Objects::toString).map(Long::parseLong).toList();
+
+        Subject target = subjectService.get(sid).orElse(null);
+        Subject parent = (target == null) ? null : target.getParent();
+
+        idList.forEach(subjectService::delete);
+
+        if (subjectService.get(sid).isPresent()) {
+            if (subjectService.get(sid).get().getChildren().isEmpty())
+                subjectService.delete(sid);
+            else
+                return String.format("redirect:/subject/%d", sid);
+        }
+        if (parent != null) {
+            return String.format("redirect:/subject/%d", parent.getId());
+        }
+        return "redirect:/subject/main";
+    }
+
 }

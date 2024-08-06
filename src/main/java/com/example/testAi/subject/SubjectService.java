@@ -49,7 +49,8 @@ public class SubjectService {
             subjectForm.setSubject((String) m.getOrDefault("subject", "Nothing"));
             subjectForm.setDescription((String) m.getOrDefault("description", "Nothing"));
             subjectForm.setExpectDate((Integer) m.getOrDefault("expect_date", 0));
-            subjectForm.setPriority((Integer) m.getOrDefault("priority", 0));
+            String priority = (String) m.getOrDefault("priority", "0");
+            subjectForm.setPriority(Integer.parseInt(priority));
             subjects.add(subjectForm);
         }
         subjects.sort((o1, o2) -> o2.getPriority() - o1.getPriority());
