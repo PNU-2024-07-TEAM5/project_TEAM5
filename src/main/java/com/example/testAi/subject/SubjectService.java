@@ -3,12 +3,14 @@ package com.example.testAi.subject;
 
 import com.example.testAi.chat.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +18,16 @@ public class SubjectService {
 
     private final SubjectRepository subjectRepository;
     private final ChatService chatService;
+
+    Optional<Subject> getSubject(Long id) {
+        return subjectRepository.findById(id);
+    }
+
+    List<Subject> getAllSubjects() {
+        return subjectRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"));
+    }
+
+
 
     List<SubjectForm> divide(Long id) {
         //TODO : divide subjects
@@ -80,6 +92,8 @@ public class SubjectService {
             parent.setDivide(true);
             subjectRepository.save(parent);
         }
+
+
     }
 
     // 자식들은 cascade로 삭제되므로 부모만 삭제
@@ -88,4 +102,6 @@ public class SubjectService {
         if (subjectRepository.existsById(id))
             subjectRepository.deleteById(id);
     }
+
+
 }
