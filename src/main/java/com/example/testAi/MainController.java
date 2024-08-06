@@ -25,4 +25,7 @@ public class MainController {
     public String home() {
         return "home";
     }
+
+    @GetMapping("/login/sucess")
+    public String sucess() { return "home"; }
 }
