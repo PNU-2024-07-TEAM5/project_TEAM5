@@ -25,13 +25,11 @@
         </div>
 
         <ul id="taskList" class="list-none p-0">
-            <li th:each="subject : ${children}" class="flex flex-col justify-between items-start p-2 bg-gray-100 rounded mb-2 transition duration-1000 ease-in-out hover:bg-pink-200 focus:bg-pink-200">
-                <div class="flex justify-between items-center w-full">
-                    <input type="checkbox" class="mr-2">
-                    <span class="font-bold" th:text="${subject.subject}">Example Task</span>
-                    <button onclick="toggleDescription(this)" class="ml-auto bg-gray-300 px-2 py-1 rounded text-lg" disabled>세부과제 보기</button>
-                </div>
-
+            <li th:each="subject : ${subjects}"  th:unless=$"{subject.isDone}" class="flex flex-col justify-between items-start p-2 bg-gray-100 rounded mb-2 transition duration-1000 ease-in-out hover:bg-pink-200 focus:bg-pink-200">
+                <div class="taskItem flex justify-between items-center w-full">
+                    <input type="checkbox" class="mr-2" th:field="*{subject.isDone}">
+                    <span class="font-bold line-through" th:text="${subject.subject}">Example Task</span>
+                    <button onclick="showLoading()" class="ml-auto bg-gray-300 px-2 py-1 rounded text-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-400">세부과제 보기</button>                </div>
                 <div class="description mt-2 text-gray-500 ml-4" th:text="${subject.description}">This is the description for Example Task.</div>
             </li>
         </ul>
@@ -45,13 +43,12 @@
         </div>
     </div>
 
-<!--hidden form-->
-<form id="hiddenForm" th:action="@{/todo}" method="post">
-    <input type="hidden" name="subject" id="subject">
-    <input type="hidden" name="description" id="description">
-</form>
+
+    <div th:replace="~{fragments/popup}"></div>
+
 </div>
 
+<script th:src="@{/js/popup.js}"></script>
 <script th:src="@{/js/todo.js}"></script>
 
 </html>

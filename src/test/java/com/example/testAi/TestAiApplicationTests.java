@@ -20,8 +20,14 @@ class TestAiApplicationTests {
 		Subject subject = new Subject();
 		subject.setParent(null);
 		subject.setSubject("스프링 부트 개발자 되기");
+		subject.setDescription("사용자가 직접 입력한 목표입니다.");
 		subject.setCreatedDate(LocalDateTime.now());
 		subjectRepository.save(subject);
+	}
+
+	@Test
+	void deleteAllSubjects() {
+		subjectRepository.deleteAll();
 	}
 
 }
