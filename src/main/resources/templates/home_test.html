@@ -67,8 +67,8 @@
 
     </div>
 
-    <form id="hiddenForm" th:action="@{/subject/update}" method="post" class="hidden">
-        <input type="hidden" name="subjects" id="subjectsInput">
+    <form id="requestForm" th:action="@{/subject/request}" method="post" class="hidden">
+        <input type="hidden" name="subject" th:value="">
     </form>
 </div>
 
