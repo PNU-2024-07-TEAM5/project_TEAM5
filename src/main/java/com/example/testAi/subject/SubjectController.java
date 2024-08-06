@@ -32,7 +32,7 @@ public class SubjectController {
         model.addAttribute("requestedId", requestedId);
         model.addAttribute("subjectForms", subjectForms);
         model.addAttribute("subjects", subjectService.getAll());
-        return "home_test";
+        return "main";
     }
 
     @PostMapping("main/divide")
@@ -117,7 +117,7 @@ public class SubjectController {
         model.addAttribute("target", target);
         model.addAttribute("subjects", target.getChildren());
 
-        return "test";
+        return "target";
     }
 
     @PostMapping("{sid}/divide")

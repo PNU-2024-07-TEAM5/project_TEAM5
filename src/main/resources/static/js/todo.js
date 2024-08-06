@@ -4,7 +4,7 @@ taskList = {'tasks' : []};
 
 function toggleTask(checkbox) {
     var span = checkbox.nextElementSibling;
-    var fullList = checkbox.parentElement.parentElement;
+    var fullList = checkbox.parentElement.parentElement.parentElement;
     var id = fullList.querySelector('input[type="hidden"]').value;
 
     if (checkbox.checked) {

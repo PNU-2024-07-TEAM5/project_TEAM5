@@ -33,7 +33,7 @@
 
         <ul id="taskList" class="list-none p-0">
             <li th:if="${#lists.isEmpty(subjects)}" class="text-center text-gray-500">
-                No tasks available.
+                😄 모든 할 일을 완료했어요!
             </li>
 
             <li th:each="subject : ${subjects}"
@@ -75,7 +75,7 @@
 
     <div th:replace="~{fragments/popup}"></div>
 
-    <form id="requestForm" th:action="@{|/subject/${target.id}/divide|}" metXXXXhod="post" class="hidden">
+    <form id="requestForm" th:action="@{|/subject/${target.id}/divide|}" method="post" class="hidden">
         <input type="hidden" name="id">
     </form>
 
