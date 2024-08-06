@@ -17,9 +17,8 @@ public class ChatService {
 
     private final OpenAiChatModel chatModel;
     private final static String CONFIG =  """
-               '>'를 기준으로 왼쪽은 상위 주제, 오른쪽은 하위 주제입니다.
-               최하위 주제(화살표 가장 오른쪽)을 달성하기 위해 필요한 주제들을 추천해드립니다.
-                최소 5개 최대 10개의 주제를 포함해야 합니다.
+                주제를 달성하기 위해 필요한 로드맵을 추천해드립니다.
+                최소 6개 최대 12개의 주제를 포함해야 합니다.
                 모든 내용은 JSON 형식으로 subjects 태그 안에 배열로 담아주세요.
                 태그는 subject, description, expect_date, priority로 구성되어 있습니다.
                 subject의 내용은 한국어로 반환해 주세요.

@@ -1,8 +1,8 @@
-package com.example.testAi.User.domain.member;
+package com.example.testAi.user.domain.member;
 
-import com.example.testAi.User.domain.member.entity.Member;
-import com.example.testAi.User.domain.member.repository.MemberRepository;
-import com.example.testAi.User.standard.dto.RsData;
+import com.example.testAi.user.domain.member.entity.Member;
+import com.example.testAi.user.domain.member.repository.MemberRepository;
+import com.example.testAi.user.standard.dto.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

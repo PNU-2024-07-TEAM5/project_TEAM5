@@ -1,7 +1,7 @@
-package com.example.testAi.User.domain.member.entity;
+package com.example.testAi.user.domain.member.entity;
 
-import com.example.testAi.User.global.jpa.entity.BaseTime;
-import com.example.testAi.User.standard.util.Ut;
+import com.example.testAi.user.global.jpa.entity.BaseTime;
+import com.example.testAi.user.standard.util.Ut;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;

@@ -19,18 +19,18 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final ChatService chatService;
 
-    Optional<Subject> getSubject(Long id) {
+    Optional<Subject> get(Long id) {
         return subjectRepository.findById(id);
     }
 
-    List<Subject> getAllSubjects() {
+    List<Subject> getAll() {
         return subjectRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"));
     }
 
-    List<Subject> addSubjectTO(Long id, String content) {
+    void addSubjectTO(Long id, String content) {
         Subject parent = subjectRepository.findById(id).orElse(null);
         if (parent == null) {
-            return null;
+            return;
         }
         Subject subject = new Subject();
         subject.setSubject(content);
@@ -40,36 +40,27 @@ public class SubjectService {
 
         parent.getChildren().add(subject);
         subjectRepository.save(parent);
-        return parent.getChildren();
     }
 
+    // 에러 발생시 빈 리스트 반환
     List<SubjectForm> divide(Long id) {
         //TODO : divide subjects
-        StringBuilder sb = new StringBuilder();
         Subject subject = subjectRepository.findById(id).orElse(null);
         if (subject == null) {
-            return null;
+            return new ArrayList<>();
         }
-        sb.append(subject.getSubject());
-        Subject parent = subject.getParent();
+        var response = chatService.generate(subject.getSubject());
 
-        for (int i = 0; i < 3; ++i) { // 3번까지만 부모를 타고 올라가도록
-            if (subject.getParent() != null) {
-                sb.insert(0, parent.getSubject() + " > ");
-                parent = parent.getParent();
-            } else {
-                break;
-            }
-        }
-
-        var response = chatService.generate(sb.toString());
         Map<String, Object> map = ChatService.jsonConverter(response);
         if (map.get("Error") != null) {
-            return null;
+            return new ArrayList<>();
         }
         List<SubjectForm> subjects = new ArrayList<>();
+
+        int no = 1;
         for (Map<String, Object> m : (List<Map<String, Object>>) map.get("subjects")) {
             SubjectForm subjectForm = new SubjectForm();
+            subjectForm.setNo(no++);
             subjectForm.setSubject((String) m.getOrDefault("subject", "Nothing"));
             subjectForm.setDescription((String) m.getOrDefault("description", "Nothing"));
             subjectForm.setExpectDate((Integer) m.getOrDefault("expect_date", 0));
@@ -80,38 +71,28 @@ public class SubjectService {
         return subjects;
     }
 
-    void saveCheckedSubjects(Subject parent, List<SubjectForm> subjects) {
+    void save(Subject parent, List<SubjectForm> subjectForms) {
         //TODO : save subject
-
-        // form이 비어있으면 divide 상태가 되지 않은 것으로 간주
-        if (subjects.isEmpty()) {
+        if (parent == null) {
             return;
         }
-        for (SubjectForm subjectForm : subjects) {
-            parent.setDivide(true);
-            if (subjectForm.isNeed()) {
-                Subject subject = new Subject();
-                subject.setSubject(subjectForm.getSubject());
-                subject.setDescription(subjectForm.getDescription());
-                subject.setCreatedDate(LocalDateTime.now());
-                subject.setExpiredDate(LocalDateTime.now().plusDays(subjectForm.getExpectDate()));
-                subject.setParent(parent);
-                subjectRepository.save(subject);
-                parent.getChildren().add(subject);
-            }
-            // 추가된 자식이 없다면 divide 상태가 되지 않은 것으로 간주
-            if (!parent.getChildren().isEmpty()) {
-                return;
-            }
-            parent.setDivide(true);
-            subjectRepository.save(parent);
+
+        for (SubjectForm subjectForm : subjectForms) {
+            Subject subject = new Subject();
+            subject.setSubject(subjectForm.getSubject());
+            subject.setDescription(subjectForm.getDescription());
+            subject.setExpiredDate(LocalDateTime.now().plusDays(subjectForm.getExpectDate()));
+            subject.setPriority(subjectForm.getPriority());
+            subject.setCreatedDate(LocalDateTime.now());
+            subject.setParent(parent);
+            subjectRepository.save(subject);
+            parent.getChildren().add(subject);
         }
-
-
+            subjectRepository.save(parent);
     }
 
     // 자식들은 cascade로 삭제되므로 부모만 삭제
-    void deleteSubject(Long id) {
+    void delete(Long id) {
         //TODO : delete subject
         if (subjectRepository.existsById(id))
             subjectRepository.deleteById(id);

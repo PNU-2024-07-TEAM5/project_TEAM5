@@ -1,4 +1,4 @@
-package com.example.testAi.User.global.security;
+package com.example.testAi.user.global.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;

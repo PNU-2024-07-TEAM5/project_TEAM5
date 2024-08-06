@@ -16,7 +16,7 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private int priority;
 
     private LocalDateTime createdDate;
     private LocalDateTime expiredDate;

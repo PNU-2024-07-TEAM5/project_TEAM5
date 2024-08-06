@@ -1,4 +1,4 @@
-package com.example.testAi.User.global.security;
+package com.example.testAi.user.global.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

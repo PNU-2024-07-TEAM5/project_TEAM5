@@ -41,10 +41,17 @@
                     <input class="mr-2" type="checkbox" onchange="toggleTask(this)">
                     <span class="font-bold" th:text="${subject.subject}">Example Task</span>
 
-                    <button th:onclick="|requestQuery(${subject.id})|"
-                            class="ml-auto bg-gray-300 px-2 py-1 rounded text-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-400">
-                        세부과제 보기
+                    <button th:if="${#lists.isEmpty(subject.children)}"
+                            th:onclick="|requestQuery(${subject.id})|"
+                            class="ml-auto bg-primary px-2 py-1 rounded text-white transition duration-300 ease-in-out transform hover:scale-105 hover:bg-primary">
+                        세부과제 생성
+
                     </button>
+
+                    <a th:unless="${#lists.isEmpty(subject.children)}" th:href="@{|/subject/${subject.id}|}"
+                            class="ml-auto bg-primary px-2 py-1 rounded text-white transition duration-300 ease-in-out transform hover:scale-105 hover:bg-primary">
+                        세부과제 보기
+                    </a>
                 </div>
                 <div class="description mt-2 text-gray-500 ml-4" th:text="${subject.description}">This is the
                     description for Example Task.
@@ -66,8 +73,11 @@
 
     </div>
 
-    <form id="requestForm" th:action="@{/subject/divide}" method="post" class="hidden">
+    <form id="requestForm" th:action="@{/subject/main/divide}" method="post" class="hidden">
         <input type="hidden" name="id">
+    </form>
+    <form id="saveForm" th:action="@{/subject/main/save}" method="post">
+        <input type="hidden" name="body">
     </form>
 </div>
 

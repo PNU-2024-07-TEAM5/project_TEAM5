@@ -1,4 +1,4 @@
-package com.example.testAi.User.global.jpa.entity;
+package com.example.testAi.user.global.jpa.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

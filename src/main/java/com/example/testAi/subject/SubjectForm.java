@@ -7,10 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SubjectForm {
-    private String subject;
     private String description;
+    private String subject;
     private int expectDate;
     private int priority;
-    private boolean isNeed;
+    private int no;
 
 }
