@@ -37,12 +37,11 @@
             <li th:each="subject : ${subjects}"
                 class="flex flex-col justify-between items-start p-2 bg-gray-100 rounded mb-2 transition duration-1000">
                 <div class="taskItem flex justify-between items-center w-full">
-                    <input type="hidden" th:value="${subject.id}">
 
                     <input class="mr-2" type="checkbox" onchange="toggleTask(this)">
-
                     <span class="font-bold" th:text="${subject.subject}">Example Task</span>
-                    <button onclick="showSelectForm()"
+
+                    <button th:onclick="|requestQuery(${subject.id})|"
                             class="ml-auto bg-gray-300 px-2 py-1 rounded text-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-400">
                         세부과제 보기
                     </button>
@@ -67,8 +66,8 @@
 
     </div>
 
-    <form id="requestForm" th:action="@{/subject/request}" method="post" class="hidden">
-        <input type="hidden" name="subject">
+    <form id="requestForm" th:action="@{/subject/divide}" method="post" class="hidden">
+        <input type="hidden" name="id">
     </form>
 </div>
 

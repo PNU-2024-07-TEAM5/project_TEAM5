@@ -25,7 +25,7 @@ public class ChatService {
                 subject의 내용은 한국어로 반환해 주세요.
                 description은 주제에 대한 짧은 한 문장의 설명을 한국어로 반환해주세요
                 expect_date는 예상 필요 기간을 일 단위 숫자로 반환해주세요.
-                priority는 1부터 10까지의 문자열 형태로 반환해주세요. 1이 가장 중요하고 10이 가장 낮은 우선순위입니다.
+                priority는 1부터 10까지의 정수 형태로 반환해주세요. 1이 가장 중요하고 10이 가장 낮은 우선순위입니다.
                 예시: {"subjects":[{"subject":"요리사 자격증 취득","description":"요리사 자격증 취득을 위한 과정","expect_date":30,"priority":"1"}]}
                """;
 

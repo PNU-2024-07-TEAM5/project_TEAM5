@@ -32,6 +32,8 @@ function hideSelectForm() {
     setTimeout(() => form.classList.add('hidden'), 500); // Wait for the fade-out animation to complete
 }
 
+
+
 function confirmYes() {
     hideSelectForm();
     showLoading();

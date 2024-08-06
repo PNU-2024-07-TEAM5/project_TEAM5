@@ -27,7 +27,21 @@ public class SubjectService {
         return subjectRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"));
     }
 
+    List<Subject> addSubjectTO(Long id, String content) {
+        Subject parent = subjectRepository.findById(id).orElse(null);
+        if (parent == null) {
+            return null;
+        }
+        Subject subject = new Subject();
+        subject.setSubject(content);
+        subject.setCreatedDate(LocalDateTime.now());
+        subject.setParent(parent);
+        subjectRepository.save(subject);
 
+        parent.getChildren().add(subject);
+        subjectRepository.save(parent);
+        return parent.getChildren();
+    }
 
     List<SubjectForm> divide(Long id) {
         //TODO : divide subjects
