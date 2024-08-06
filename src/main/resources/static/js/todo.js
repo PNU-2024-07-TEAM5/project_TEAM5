@@ -5,10 +5,10 @@ function toggleTask(checkbox) {
     if (checkbox.checked) {
         span.classList.add('line-through');
         fullList.classList.remove('bg-gray-100');
-        fullList.classList.add('bg-success');
+        fullList.classList.add('bg-primary');
     } else {
         span.classList.remove('line-through');
         fullList.classList.add('bg-gray-100');
-        fullList.classList.remove('bg-success');
+        fullList.classList.remove('bg-primary');
     }
 }
