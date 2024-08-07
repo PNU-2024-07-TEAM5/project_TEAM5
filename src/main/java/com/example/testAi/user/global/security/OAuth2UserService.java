@@ -1,4 +1,4 @@
-package com.example.testAi.User.global.security;
+package com.example.testAi.user.global.security;
 import com.example.testAi.user.domain.member.MemberService;
 import com.example.testAi.user.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,9 @@
 package com.example.testAi.user.domain.member.entity;
 
+import com.example.testAi.subject.Subject;
 import com.example.testAi.user.global.jpa.entity.BaseTime;
 import com.example.testAi.user.standard.util.Ut;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +28,9 @@ public class Member extends BaseTime {
     @Column(unique = true)
     private String email;
     private String profileImgUrl;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Subject> Favorite;
 
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {

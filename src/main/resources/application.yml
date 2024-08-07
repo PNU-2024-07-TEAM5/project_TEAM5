@@ -4,6 +4,8 @@ server:
 spring:
   profiles:
     include: secret
+  thymeleaf:
+    cache: false
   h2:
     console:
       enabled: true
