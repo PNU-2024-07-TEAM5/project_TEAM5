@@ -2,6 +2,8 @@ package com.example.testAi.subject;
 
 
 import com.example.testAi.chat.ChatService;
+import com.example.testAi.user.domain.member.entity.Member;
+import com.example.testAi.user.global.rp.Rq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,20 +20,27 @@ public class SubjectService {
 
     private final SubjectRepository subjectRepository;
     private final ChatService chatService;
+    private final Rq request;
 
     Optional<Subject> get(Long id) {
         return subjectRepository.findById(id);
     }
 
     List<Subject> getAll() {
-        return subjectRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"));
+        if (request.isLogin()) {
+            return subjectRepository.findAllByMemberId(Sort.by(Sort.Order.desc("createdDate")), request.getMember().getId());
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     // 에러 발생시 빈 리스트 반환
     List<SubjectForm> divide(Long id) {
         //TODO : divide subjects
-        Subject subject = subjectRepository.findById(id).orElse(null);
-        if (subject == null) {
+
+        Subject subject = get(id).orElse(null);
+
+        if (subject == null || !request.isLogin()) {
             return new ArrayList<>();
         }
         var response = chatService.generate(subject.getSubject());
@@ -40,6 +49,7 @@ public class SubjectService {
         if (map.get("Error") != null) {
             return new ArrayList<>();
         }
+
         List<SubjectForm> subjects = new ArrayList<>();
 
         int no = 1;
@@ -59,9 +69,10 @@ public class SubjectService {
 
     void save(Subject parent, List<SubjectForm> subjectForms) {
         //TODO : save subject
-        if (parent == null) {
+        if (parent == null || !request.isLogin()) {
             return;
         }
+        Member member = request.getMember();
 
         for (SubjectForm subjectForm : subjectForms) {
             Subject subject = new Subject();
@@ -71,24 +82,32 @@ public class SubjectService {
             subject.setPriority(subjectForm.getPriority());
             subject.setCreatedDate(LocalDateTime.now());
             subject.setParent(parent);
+            subject.setMember(member);
             subjectRepository.save(subject);
             parent.getChildren().add(subject);
         }
         subjectRepository.save(parent);
     }
 
+
     // 자식들은 cascade로 삭제되므로 부모만 삭제
     void delete(Long id) {
         //TODO : delete subject
-        if (subjectRepository.existsById(id))
+        if (subjectRepository.existsById(id)) {
             subjectRepository.deleteById(id);
+        }
     }
 
     void add(Long id, String content) {
+        if (!request.isLogin()) {
+            return;
+        }
+
         Subject subject = new Subject();
         subject.setSubject(content);
         subject.setDescription("사용자가 직접 입력한 내용입니다.");
         subject.setCreatedDate(LocalDateTime.now());
+        subject.setMember(request.getMember());
 
         if (id != null && subjectRepository.existsById(id)) {
             Subject parent = subjectRepository.findById(id).orElse(null);
@@ -98,7 +117,6 @@ public class SubjectService {
         }
 
         subjectRepository.save(subject);
-
     }
 
 }

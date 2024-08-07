@@ -3,30 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
 <head>
-    <script>
-        function submitLoginForm(form) {
-            form.username.value = form.username.value.trim();
-
-            if (form.username.value.length === 0) {
-                alert("아이디를 입력해주세요.");
-                form.username.focus();
-                return false;
-            }
-
-            if (form.password.value.length === 0) {
-                alert("비밀번호를 입력해주세요.");
-                form.password.focus();
-                return false;
-            }
-
-            form.submit();
-        }
-    </script>
+    <script th:src="@{/js/login.js}"></script>
 </head>
 <body>
 <div layout:fragment="content">
     <div class="flex flex-col items-center pt-10 h-screen">
-        <div class="bg-white p-10 rounded-lg shadow-md w-96">
+        <div class="bg-base-100 p-10 rounded-lg shadow-md w-96">
             <h2 class="text-2xl font-bold mb-6">로그인</h2>
             <form th:action="@{/member/login}" method="POST" class="flex-col items-center" onsubmit="return submitLoginForm(this);">
                 <div th:if="${param.error}">
