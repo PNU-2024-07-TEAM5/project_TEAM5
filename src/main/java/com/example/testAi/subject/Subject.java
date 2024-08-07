@@ -1,6 +1,7 @@
 package com.example.testAi.subject;
 
 
+import com.example.testAi.user.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,9 @@ public class Subject {
     private LocalDateTime createdDate;
     private LocalDateTime expiredDate;
 
+    @ManyToOne
+    private Member member;
+
     @Column(length = 200)
     private String subject;
     private String description;
@@ -31,6 +35,8 @@ public class Subject {
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     List<Subject> children;
+
+
 
     private boolean isDone;
     private boolean isDivide;

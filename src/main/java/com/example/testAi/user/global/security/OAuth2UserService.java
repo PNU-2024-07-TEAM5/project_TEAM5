@@ -40,7 +40,8 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
                 Member member = memberService.modifyOrJoin(username, oauthType, email, nickname, profileImgUrl).getData();
 
-                return new com.example.testAi.user.global.security.SecurityUser(member.getUsername(), member.getPassword(), member.getAuthorities());
+                return new SecurityUser(member.getUsername(), member.getPassword(), member.getAuthorities());
+
             }
         }
 
