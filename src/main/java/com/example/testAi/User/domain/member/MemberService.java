@@ -19,11 +19,11 @@ public class MemberService {
 
     @Transactional
     public RsData<Member> join(String username, String password) {
-        return join(username, password, username, "");
+        return join(username, password, username + "@test.com", username, "");
     }
 
     @Transactional
-    public RsData<Member> join(String username, String password, String nickname, String profileImgUrl) {
+    public RsData<Member> join(String username, String password, String email, String nickname, String profileImgUrl) {
         if (findByUsername(username).isPresent()) {
             return RsData.of("400-2", "이미 존재하는 회원입니다.");
         }
@@ -31,6 +31,7 @@ public class MemberService {
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
+                .email(email)
                 .nickname(nickname)
                 .profileImgUrl(profileImgUrl)
                 .build();
@@ -48,12 +49,12 @@ public class MemberService {
     }
 
     @Transactional
-    public RsData<Member> modifyOrJoin(String username, String providerTypeCode, String nickname, String profileImgUrl) {
+    public RsData<Member> modifyOrJoin(String username, String providerTypeCode, String email, String nickname, String profileImgUrl) {
         Member member = findByUsername(username).orElse(null);
 
         if (member == null) {
             return join(
-                    username, "", nickname, profileImgUrl
+                    username, "", email, nickname, profileImgUrl
             );
         }
 

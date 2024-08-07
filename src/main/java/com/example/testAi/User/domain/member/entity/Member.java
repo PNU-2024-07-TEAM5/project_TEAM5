@@ -26,6 +26,8 @@ public class Member extends BaseTime {
     private String username;
     private String password;
     private String nickname;
+    @Column(unique = true)
+    private String email;
     private String profileImgUrl;
 
     @Transient

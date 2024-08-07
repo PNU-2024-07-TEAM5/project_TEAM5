@@ -16,16 +16,8 @@ public class MainController {
         return "todo";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
     @GetMapping("/home")
     public String home() {
         return "home";
     }
-
-    @GetMapping("/login/sucess")
-    public String sucess() { return "home"; }
 }
