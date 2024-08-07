@@ -1,5 +1,5 @@
 package com.example.testAi.User.global.initData;
-import com.example.testAi.User.domain.member.MemberService;
+import com.example.testAi.user.domain.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Profile("!prod")
 @Configuration

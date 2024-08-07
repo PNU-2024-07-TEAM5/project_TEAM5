@@ -1,4 +1,4 @@
-package com.example.testAi.user.global.security;
+package com.example.testAi.user.global;
 
 import lombok.Getter;
 

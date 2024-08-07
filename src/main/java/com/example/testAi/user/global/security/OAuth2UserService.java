@@ -1,6 +1,6 @@
-package com.example.testAi.User.global.security;
-import com.example.testAi.User.domain.member.MemberService;
-import com.example.testAi.User.domain.member.entity.Member;
+package com.example.testAi.user.global.security;
+import com.example.testAi.user.domain.member.MemberService;
+import com.example.testAi.user.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

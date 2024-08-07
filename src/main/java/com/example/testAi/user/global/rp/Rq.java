@@ -1,7 +1,7 @@
-package com.example.testAi.User.global.rp;
-import com.example.testAi.User.domain.member.MemberService;
-import com.example.testAi.User.domain.member.entity.Member;
-import com.example.testAi.User.global.security.SecurityUser;
+package com.example.testAi.user.global.rp;
+import com.example.testAi.user.domain.member.MemberService;
+import com.example.testAi.user.domain.member.entity.Member;
+import com.example.testAi.user.global.security.SecurityUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

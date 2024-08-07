@@ -1,7 +1,8 @@
-package com.example.testAi.User.global.security;
-import com.example.testAi.User.domain.member.entity.Member;
-import com.example.testAi.User.domain.member.repository.MemberRepository;
-import com.example.testAi.User.global.UserRole;
+package com.example.testAi.user.global.security;
+
+import com.example.testAi.user.domain.member.entity.Member;
+import com.example.testAi.user.domain.member.repository.MemberRepository;
+import com.example.testAi.user.global.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.Optional;
 
 @Service
