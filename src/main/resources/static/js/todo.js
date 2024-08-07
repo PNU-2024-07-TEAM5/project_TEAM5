@@ -61,3 +61,8 @@ function onDelete() {
     delForm.elements['body'].value = JSON.stringify(taskList);
     delForm.submit();
 }
+
+function onChangeSort() {
+    var sortForm = document.getElementById('sortForm');
+    sortForm.submit();
+}

@@ -19,9 +19,10 @@ public class SubjectController {
 
 
     @GetMapping("main")
-    public String getAllSubjects(Model model) {
+    public String getAllSubjects(Model model,
+         @RequestParam(value = "taskSort", required = false, defaultValue = "recent") String taskSort) {
         if (!subjectFormScope.getPrevStep().equals(ControllerStep.DIVIDE)){
-            subjectFormScope.clear();
+                subjectFormScope.clear();
             subjectFormScope.setPrevStep(ControllerStep.START);
         } else {
             subjectFormScope.setPrevStep(ControllerStep.CHECK);
@@ -31,7 +32,11 @@ public class SubjectController {
         List<SubjectForm> subjectForms = new ArrayList<>(subjectFormScope.getSubjectForms());
         model.addAttribute("requestedId", requestedId);
         model.addAttribute("subjectForms", subjectForms);
-        model.addAttribute("subjects", subjectService.getAll());
+        if (taskSort.equals("recent")) {
+            model.addAttribute("subjects", subjectService.getAll());
+        } else {
+            model.addAttribute("subjects", subjectService.getFavorite());
+        }
         return "main";
     }
 

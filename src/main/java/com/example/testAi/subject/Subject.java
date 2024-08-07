@@ -22,6 +22,8 @@ public class Subject {
     private LocalDateTime createdDate;
     private LocalDateTime expiredDate;
 
+    private Integer depth;
+
     @ManyToOne
     private Member member;
 
@@ -36,8 +38,7 @@ public class Subject {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     List<Subject> children;
 
-
-
     private boolean isDone;
+
     private boolean isDivide;
 }

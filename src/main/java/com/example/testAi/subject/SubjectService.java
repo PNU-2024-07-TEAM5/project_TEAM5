@@ -35,6 +35,34 @@ public class SubjectService {
 
     }
 
+    List<Subject> getFavorite() {
+        if(request.isLogin()) {
+            return request.getMember().getFavorite();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    void delFavorite(Long id) {
+        if (request.isLogin()) {
+            Member member = request.getMember();
+            Subject subject = get(id).orElse(null);
+            if (subject != null) {
+                member.getFavorite().remove(subject);
+            }
+        }
+    }
+
+    void addFavorite(Long id) {
+        if (request.isLogin()) {
+            Member member = request.getMember();
+            Subject subject = get(id).orElse(null);
+            if (subject != null) {
+                member.getFavorite().add(subject);
+            }
+        }
+    }
+
     // 에러 발생시 빈 리스트 반환
     List<SubjectForm> divide(Long id) {
         //TODO : divide subjects

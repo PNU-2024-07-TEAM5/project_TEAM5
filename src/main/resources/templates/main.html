@@ -17,10 +17,14 @@
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-xl font-bold">🚩 Todo List</h1>
             <div class="flex items-center">
-                <select class="bg-gray-300 px-1 py-1 rounded" name="taskSort" onchange="sortTasks(this)">
-                    <option value="priority">최신순</option>
-                    <option value="date">즐겨찾기</option>
+
+                <form th:action="@{/subject/main}" id="sortForm" method="get">
+                <select class="bg-gray-300 px-1 py-1 rounded" name="taskSort" onchange="onChangeSort()">
+                    <option value="recent" th:selected="${param.taskSort != null and param.taskSort[0] == 'recent'}">최신순</option>
+                    <option value="favorite" th:selected="${param.taskSort != null and param.taskSort[0] == 'favorite'}">즐겨찾기</option>
                 </select>
+
+                </form>
 
                 <button class="bg-success text-white ml-4 px-2 py-1 rounded mr-2 text-l flex items-center"
                         onclick="onDelete()">
