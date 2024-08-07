@@ -37,7 +37,16 @@ public class SubjectService {
 
     List<Subject> getFavorite() {
         if(request.isLogin()) {
-            return request.getMember().getFavorite();
+            return subjectRepository.findAllByMemberId(Sort.by(Sort.Order.desc("createdDate"))
+                    , request.getMember().getId()).stream().filter(Subject::isFavorite).toList();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+    List<Subject> getRoots() {
+        if (request.isLogin()) {
+            return subjectRepository.findAllByMemberId(Sort.by(Sort.Order.desc("createdDate"))
+                    , request.getMember().getId()).stream().filter(subject -> subject.getParent() == null).toList();
         } else {
             return new ArrayList<>();
         }
@@ -114,7 +123,7 @@ public class SubjectService {
             subject.setCreatedDate(LocalDateTime.now());
             subject.setParent(parent);
             subject.setMember(member);
-
+            subject.setDepth(parent.getDepth() + 1);
             subjectRepository.save(subject);
             parent.getChildren().add(subject);
         }
@@ -141,16 +150,16 @@ public class SubjectService {
         subject.setDescription("사용자가 직접 입력한 내용입니다.");
         subject.setCreatedDate(LocalDateTime.now());
         subject.setMember(request.getMember());
-
+        subject.setDepth(0);
 
         if (id != null && subjectRepository.existsById(id)) {
             Subject parent = subjectRepository.findById(id).orElse(null);
             subject.setParent(parent);
             parent.getChildren().add(subject);
+            subject.setDepth(parent.getDepth() + 1);
             subjectRepository.save(parent);
         }
 
         subjectRepository.save(subject);
     }
-
 }

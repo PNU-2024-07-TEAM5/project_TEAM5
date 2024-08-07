@@ -1,7 +1,6 @@
 taskList = {'tasks' : []};
 
 
-
 function toggleTask(checkbox) {
     var span = checkbox.nextElementSibling;
     var fullList = checkbox.parentElement.parentElement.parentElement;
@@ -65,4 +64,10 @@ function onDelete() {
 function onChangeSort() {
     var sortForm = document.getElementById('sortForm');
     sortForm.submit();
+}
+
+function toggleFavorite(star) {
+    star.classList.toggle('text-yellow-500');
+
+
 }

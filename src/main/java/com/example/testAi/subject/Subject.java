@@ -39,6 +39,6 @@ public class Subject {
     List<Subject> children;
 
     private boolean isDone;
-
     private boolean isDivide;
+    private boolean isFavorite;
 }

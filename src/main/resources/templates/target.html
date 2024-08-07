@@ -2,9 +2,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
 
+
 <th:block layout:fragment="head">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
     <script th:src="@{/js/popup.js}"></script>
     <script th:src="@{/js/todo.js}"></script>
+    <script th:src="@{/js/sortable.js}"></script>
     <title>PNU LOADMAP</title>
 </th:block>
 

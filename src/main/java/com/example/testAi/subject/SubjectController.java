@@ -34,8 +34,10 @@ public class SubjectController {
         model.addAttribute("subjectForms", subjectForms);
         if (taskSort.equals("recent")) {
             model.addAttribute("subjects", subjectService.getAll());
-        } else {
+        } else if(taskSort.equals("favorite")) {
             model.addAttribute("subjects", subjectService.getFavorite());
+        } else {
+            model.addAttribute("subjects", subjectService.getRoots());
         }
         return "main";
     }
