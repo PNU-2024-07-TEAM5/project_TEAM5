@@ -8,7 +8,7 @@ public class MainController {
 
     @GetMapping("/")
     public String root() {
-        return "redirect:/subject/main";
+        return "start";
     }
 
     @GetMapping("/todo")
