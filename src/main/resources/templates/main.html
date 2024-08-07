@@ -7,7 +7,6 @@
     <script th:src="@{/js/popup.js}"></script>
     <script th:src="@{/js/todo.js}"></script>
 
-
 </th:block>
 
 
@@ -32,6 +31,7 @@
 
         <div th:replace="~{fragments/basicList}"></div>
 
+
         <div class="fixed bottom-10 left-0 right-0 w-4/5 mx-auto bg-gray-300 p-[1px] rounded-full">
             <form id="inputForm" th:action="@{/subject/main/add}" method="post"
                   class="flex justify-between items-center">
@@ -41,6 +41,7 @@
                    class="bg-blue-500 text-white px-4 py-4 rounded-r-full transition duration-1000 ease-in-out hover:bg-blue-700 focus:bg-blue-700 text-lg">
                     추가
                 </a>
+
             </form>
         </div>
         <div th:replace="~{fragments/popup}"></div>

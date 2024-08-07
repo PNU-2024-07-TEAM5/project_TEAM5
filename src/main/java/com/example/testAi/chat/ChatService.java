@@ -16,6 +16,7 @@ import java.util.*;
 public class ChatService {
 
     private final OpenAiChatModel chatModel;
+
     private final static String CONFIG = """
              주제를 달성하기 위해 필요한 로드맵을 추천해주세요.
              최대한 만족스러운 로드맵을 제공하기 위해, 최소 6개 최대 8개의 주제를 포함해야 합니다.

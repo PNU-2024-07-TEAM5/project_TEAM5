@@ -1,5 +1,6 @@
 package com.example.testAi.user.global.security;
 
+
 import com.example.testAi.user.domain.member.entity.Member;
 import com.example.testAi.user.domain.member.repository.MemberRepository;
 import com.example.testAi.user.global.UserRole;
@@ -36,5 +37,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
         }
         return new SecurityUser(member.getUsername(), member.getPassword(), member.getAuthorities());
+
     }
 }

@@ -32,6 +32,7 @@ public class SubjectService {
         } else {
             return new ArrayList<>();
         }
+
     }
 
     // 에러 발생시 빈 리스트 반환
@@ -41,6 +42,7 @@ public class SubjectService {
         Subject subject = get(id).orElse(null);
 
         if (subject == null || !request.isLogin()) {
+
             return new ArrayList<>();
         }
         var response = chatService.generate(subject.getSubject());
@@ -74,6 +76,7 @@ public class SubjectService {
         }
         Member member = request.getMember();
 
+
         for (SubjectForm subjectForm : subjectForms) {
             Subject subject = new Subject();
             subject.setSubject(subjectForm.getSubject());
@@ -83,6 +86,7 @@ public class SubjectService {
             subject.setCreatedDate(LocalDateTime.now());
             subject.setParent(parent);
             subject.setMember(member);
+
             subjectRepository.save(subject);
             parent.getChildren().add(subject);
         }
@@ -103,11 +107,13 @@ public class SubjectService {
             return;
         }
 
+
         Subject subject = new Subject();
         subject.setSubject(content);
         subject.setDescription("사용자가 직접 입력한 내용입니다.");
         subject.setCreatedDate(LocalDateTime.now());
         subject.setMember(request.getMember());
+
 
         if (id != null && subjectRepository.existsById(id)) {
             Subject parent = subjectRepository.findById(id).orElse(null);
