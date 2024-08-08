@@ -27,8 +27,16 @@
                         </a>
                     </div>
                 </div>
-                <div class="description mt-2 text-gray-500 ml-4" th:text="${list.description}">This is the
-                    description for Example Task.
+
+                <div class="flex justify-between items-center w-full">
+                    <div class="description mt-2 text-gray-500 ml-4" th:text="${list.description}">This is the
+                        description for Example Task.
+                    </div>
+                    <div class="flex items-center bg-gray-200 rounded-full my-1 px-1 py-1 w-1/5">
+                        <label for="expectInput" class="text-sm text-gray-500 px-1 mr-1 w-[50%]" >예상일</label>
+                        <input th:if="${list.expiredDate>0}"  id="expectInput" type="text" class="text-sm text-gray-500 bg-gray-200 w-[50%] rounded-full  py-1 text-right" th:placeholder="${list.expiredDate}">
+                        <input th:unless="${list.expiredDate>0}"  id="expectInput" type="text" class="text-sm text-gray-500 bg-gray-200 w-[50%] rounded-full py-1 text-right" placeholder="미정">
+                    </div>
                 </div>
                 <input type="hidden" th:value="${list.id}">
             </li>
