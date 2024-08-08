@@ -1,6 +1,5 @@
 package com.example.testAi.subject;
 
-import com.example.testAi.user.global.rp.Rq;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;

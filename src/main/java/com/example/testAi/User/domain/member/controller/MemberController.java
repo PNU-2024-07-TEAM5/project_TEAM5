@@ -1,6 +1,5 @@
 package com.example.testAi.User.domain.member.controller;
-
-import com.example.testAi.user.domain.member.MemberService;
+import com.example.testAi.User.domain.member.MemberService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,5 +1,86 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+<style>
+    .favorite {
+        color: #b58900; /* text-yellow-700 */
+        border: 1px solid #b58900; /* border-yellow-700 */
+        font-weight: 500; /* font-medium */
+        border-radius: 9999px; /* rounded-full */
+        font-size: 0.875rem; /* text-sm */
+        padding: 0.625rem; /* p-2.5 */
+        text-align: center; /* text-center */
+        display: inline-flex; /* inline-flex */
+        align-items: center; /* items-center */
+    }
+
+    .favorite_on {
+        background-color: #b58900; /* hover:bg-yellow-700 */
+        color: #ffffff; /* hover:text-white */
+    }
+
+    .favorite:hover {
+        outline: none; /* focus:outline-none */
+        box-shadow: 0 0 0 4px #fde68a; /* focus:ring-4 focus:ring-yellow-300 */
+    }
+
+    .dark .favorite {
+        border-color: #d69e2e; /* dark:border-yellow-500 */
+        color: #d69e2e; /* dark:text-yellow-500 */
+    }
+
+    .dark .favorite_on {
+        color: #ffffff; /* dark:hover:text-white */
+        background-color: #d69e2e; /* dark:hover:bg-yellow-500 */
+    }
+
+    .dark .favorite:hover {
+        box-shadow: 0 0 0 4px #7b341e; /* dark:focus:ring-yellow-800 */
+    }
+
+</style>
+
+<script>
+    function requestQueryFavorite(obj,subject_id){
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        $(function() {
+            $(document).ajaxSend(function(e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+        });
+
+        console.log(subject_id);
+
+        $.ajax({
+            url : "/subject/main/favorite/"+subject_id,
+            type : "GET",
+            dataType : "text",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+        })
+
+            .done(function (json){
+                if (json=="true"){
+                    $(obj).addClass("favorite_on");
+                } else {
+                    $(obj).removeClass('favorite_on');
+                }
+
+            })
+
+            .fail(function (xhr, status, errorThrown){
+                alert("Ajax failed")
+            })
+    }
+    //hover:bg-yellow-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-yellow-300
+</script>
 <div th:fragment="recentList">
 
     <ul id="taskList" class="list-none p-0">
@@ -15,8 +96,9 @@
                     <span class="font-bold" th:text="${subject.subject}">Example Task</span>
                 </div>
                 <div>
-                    <button type="button"
-                            class="text-yellow-700 border border-yellow-700 hover:bg-yellow-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:border-yellow-500 dark:text-yellow-500 dark:hover:text-white dark:focus:ring-yellow-800 dark:hover:bg-yellow-500">
+                    <button type="button" id="favorite_btn"
+                            class="favorite"
+                            th:onclick="|requestQueryFavorite(this,${subject.id})|">
                         <i class="fas fa-star"></i>
                         <span class="sr-only">즐겨찾기</span>
                     </button>

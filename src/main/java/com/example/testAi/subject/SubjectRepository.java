@@ -9,7 +9,13 @@ import java.util.List;
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
     List<Subject> findAllByMemberId(Sort sort, Long memberId);
+
     List<Subject> findAll(Sort sort);
+
     void deleteById(Long id);
+
     boolean existsById(Long id);
+
+    List<Subject> findAllByMemberIdAndFavoriteIsTrue(Long memberId);
+
 }
