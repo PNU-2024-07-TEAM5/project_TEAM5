@@ -1,35 +1,36 @@
-taskList = {'tasks' : []};
+function requestQueryFavorite(obj,subject_id){
 
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
 
-function FavoriteDel(checkbox) {
-    var span = checkbox.nextElementSibling;
-    var fullList = checkbox.parentElement.parentElement.parentElement;
-    var id = fullList.querySelector('input[type="hidden"]').value;
+    $(function() {
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
 
-    if (checkbox.checked) {
-        span.classList.add('line-through');
-        fullList.classList.remove('bg-gray-100');
-        fullList.classList.add('bg-success');
+    console.log(subject_id);
 
-        for (var i = 0; i < taskList.tasks.length; i++) {
-            if (taskList.tasks[i] === id) {
-                return;
+    $.ajax({
+        url : "/subject/main/favorite/"+subject_id,
+        type : "GET",
+        dataType : "text",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+    })
+
+        .done(function (json){
+            if (json=="true"){
+                $(obj).addClass("favorite_on");
+            } else {
+                $(obj).removeClass('favorite_on');
             }
-        }
-        taskList.tasks.push(id);
 
+        })
 
-    } else {
-        span.classList.remove('line-through');
-        fullList.classList.add('bg-gray-100');
-        fullList.classList.remove('bg-success');
+        .fail(function (xhr, status, errorThrown){
+            alert("Ajax failed")
+        })
 
-        for (var i = 0; i < taskList.tasks.length; i++) {
-            if (taskList.tasks[i] === id) {
-                taskList.tasks.splice(i, 1);
-                return;
-            }
-        }
-    }
-    console.log(taskList);
 }

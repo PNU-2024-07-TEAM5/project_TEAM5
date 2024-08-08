@@ -1,6 +1,12 @@
 server:
   port: 8080
 
+http:
+  encoding:
+    charset: UTF-8
+    enabled: true
+    force: true
+
 spring:
   profiles:
     include: secret

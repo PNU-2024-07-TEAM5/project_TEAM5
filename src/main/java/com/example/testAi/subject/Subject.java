@@ -21,7 +21,9 @@ public class Subject {
     private int priority;
 
     private LocalDateTime createdDate;
-    private LocalDateTime expiredDate;
+    private int expiredDate;
+
+    private Integer depth;
 
     private Integer depth;
 

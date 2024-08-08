@@ -36,11 +36,25 @@ public class SubjectController {
         List<SubjectForm> subjectForms = new ArrayList<>(subjectFormScope.getSubjectForms());
         model.addAttribute("requestedId", requestedId);
         model.addAttribute("subjectForms", subjectForms);
+
+
+        // taskSort에 따라 다르게 처리
+        if (taskSort.equals("recent")) {
+            model.addAttribute("subjects", subjectService.getAll());
+        } else if(taskSort.equals("favorite")) {
+            model.addAttribute("subjects", subjectService.getFavorite());
+        } else if(taskSort.equals("tree")) {
+            model.addAttribute("subjects", subjectService.getRoots());
+        } else {
+            model.addAttribute("subjects", subjectService.getDone());
+        }
+
         if (taskSort.equals("recent")) {
             model.addAttribute("subjects", subjectService.getAll());
         } else {
             model.addAttribute("subjects", subjectService.getFavorite());
         }
+
         return "main";
     }
 
@@ -87,7 +101,6 @@ public class SubjectController {
         return "redirect:/subject/main";
     }
 
-
     @PostMapping("main/add")
     public String addSubject(@RequestParam("taskInput") String taskInput) {
         subjectService.add(null, taskInput);
@@ -112,6 +125,19 @@ public class SubjectController {
         return "redirect:/subject/main";
     }
 
+    @PostMapping("main/done")
+    public String doneSubject(@RequestParam("body") String body) {
+        JSONObject jsonObject = new JSONObject(body);
+        List<Long> ids = jsonObject.getJSONArray("tasks").toList().stream()
+                .map(Objects::toString).map(Long::parseLong).toList();
+
+        ids.forEach(subjectService::done);
+
+        return "redirect:/subject/main";
+    }
+
+
+
 
     @GetMapping("/{sid}")
     public String getTargetSubjects(Model model, @PathVariable Long sid) {
@@ -128,11 +154,13 @@ public class SubjectController {
         if (target == null) {
             return "redirect:/subject/main";
         }
+        List<Subject> subjects = target.children;
+        subjects.sort(Comparator.comparing(Subject::getPriority));
 
         model.addAttribute("requestedId", requestedId);
         model.addAttribute("subjectForms", subjectForms);
         model.addAttribute("target", target);
-        model.addAttribute("subjects", target.getChildren());
+        model.addAttribute("subjects", subjects);
 
         return "target";
     }
@@ -209,5 +237,31 @@ public class SubjectController {
         }
         return "redirect:/subject/main";
     }
+
+
+    @PostMapping("{sid}/done")
+    public String doneTargetSubject(@RequestParam("body") String body, @PathVariable Long sid) {
+        JSONObject jsonObject = new JSONObject(body);
+
+        List<Long> idList = jsonObject.getJSONArray("tasks").toList().stream()
+                .map(Objects::toString).map(Long::parseLong).toList();
+
+        Subject target = subjectService.get(sid).orElse(null);
+        Subject parent = (target == null) ? null : target.getParent();
+
+        idList.forEach(subjectService::delete);
+
+        if (subjectService.get(sid).isPresent()) {
+            if (subjectService.get(sid).get().getChildren().isEmpty())
+                subjectService.delete(sid);
+            else
+                return String.format("redirect:/subject/%d", sid);
+        }
+        if (parent != null) {
+            return String.format("redirect:/subject/%d", parent.getId());
+        }
+        return "redirect:/subject/main";
+    }
+
 
 }
