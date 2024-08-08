@@ -2,12 +2,16 @@ package com.example.testAi.subject;
 
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -33,6 +37,7 @@ public class SubjectController {
         model.addAttribute("requestedId", requestedId);
         model.addAttribute("subjectForms", subjectForms);
 
+
         // taskSort에 따라 다르게 처리
         if (taskSort.equals("recent")) {
             model.addAttribute("subjects", subjectService.getAll());
@@ -42,6 +47,12 @@ public class SubjectController {
             model.addAttribute("subjects", subjectService.getRoots());
         } else {
             model.addAttribute("subjects", subjectService.getDone());
+        }
+
+        if (taskSort.equals("recent")) {
+            model.addAttribute("subjects", subjectService.getAll());
+        } else {
+            model.addAttribute("subjects", subjectService.getFavorite());
         }
 
         return "main";
@@ -95,6 +106,14 @@ public class SubjectController {
         subjectService.add(null, taskInput);
         return "redirect:/subject/main";
     }
+
+    @GetMapping("main/favorite/{subject_id}")
+    public ResponseEntity<Boolean> favorite(@PathVariable("subject_id") Long subject_id) {
+        boolean ret = subjectService.switchFavorite(subject_id);
+        System.out.println("good_favorite_controller_success");
+        return ResponseEntity.ok(ret);
+    }
+
 
     @PostMapping("main/delete")
     public String deleteSubject(@RequestParam("body") String body) {

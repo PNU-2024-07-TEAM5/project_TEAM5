@@ -1,10 +1,11 @@
 package com.example.testAi.subject;
 
 
-import com.example.testAi.user.domain.member.entity.Member;
+import com.example.testAi.User.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +25,8 @@ public class Subject {
 
     private Integer depth;
 
+    private Integer depth;
+
     @ManyToOne
     private Member member;
 
@@ -39,6 +42,12 @@ public class Subject {
     List<Subject> children;
 
     private boolean isDone;
+
     private boolean isDivide;
-    private boolean isFavorite;
+
+    //favorite 설정
+    @ColumnDefault("0")
+    private boolean favorite;
+
+
 }

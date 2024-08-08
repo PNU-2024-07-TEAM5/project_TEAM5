@@ -113,5 +113,4 @@ function onChangeSort() {
 function toggleFavorite(star) {
     star.classList.toggle('text-yellow-500');
 
-
 }

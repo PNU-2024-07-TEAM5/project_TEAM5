@@ -32,4 +32,5 @@ function requestQueryFavorite(obj,subject_id){
         .fail(function (xhr, status, errorThrown){
             alert("Ajax failed")
         })
+
 }

@@ -1,6 +1,7 @@
-package com.example.testAi.user.global.security;
-import com.example.testAi.user.domain.member.MemberService;
-import com.example.testAi.user.domain.member.entity.Member;
+
+package com.example.testAi.User.global.security;
+import com.example.testAi.User.domain.member.MemberService;
+import com.example.testAi.User.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -39,7 +40,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 String email = oauthId + "@kakao.com";
 
                 Member member = memberService.modifyOrJoin(username, oauthType, email, nickname, profileImgUrl).getData();
-
                 return new SecurityUser(member.getUsername(), member.getPassword(), member.getAuthorities());
 
             }

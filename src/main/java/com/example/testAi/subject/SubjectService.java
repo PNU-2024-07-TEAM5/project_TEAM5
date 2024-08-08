@@ -2,8 +2,8 @@ package com.example.testAi.subject;
 
 
 import com.example.testAi.chat.ChatService;
-import com.example.testAi.user.domain.member.entity.Member;
-import com.example.testAi.user.global.rp.Rq;
+import com.example.testAi.User.domain.member.entity.Member;
+import com.example.testAi.User.global.rp.Rq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -47,18 +47,6 @@ public class SubjectService {
         }
     }
 
-
-    List<Subject> getFavorite() {
-        if (request.isLogin()) {
-            return subjectRepository.findAllByMemberId(Sort.by(Sort.Order.desc("createdDate"))
-                            , request.getMember().getId()).stream().filter(Subject::isFavorite).filter(s -> !(s.isDone()))
-                    .toList();
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
-
     List<Subject> getRoots() {
         if (request.isLogin()) {
             return subjectRepository.findAllByMemberId(Sort.by(Sort.Order.desc("createdDate"))
@@ -74,6 +62,11 @@ public class SubjectService {
         if (request.isLogin()) {
             return subjectRepository.findAllByMemberId(Sort.by(Sort.Order.desc("createdDate"))
                     , request.getMember().getId()).stream().filter(Subject::isDone).toList();
+
+          
+    List<Subject> getFavorite() {
+        if(request.isLogin()) {
+            return subjectRepository.findAllByMemberIdAndFavoriteIsTrue(request.getMember().getId());
         } else {
             return new ArrayList<>();
         }
@@ -82,25 +75,30 @@ public class SubjectService {
 
     void delFavorite(Long id) {
         if (request.isLogin()) {
-            Member member = request.getMember();
-            Subject subject = get(id).orElse(null);
+            Subject subject = subjectRepository.findById(id).orElse(null);
             if (subject != null) {
-                member.getFavorite().remove(subject);
+                subject.setFavorite(false); // isFavorite 값을 false로 변경
+                subjectRepository.save(subject); // 변경사항 저장
             }
         }
     }
-
-
-    void addFavorite(Long id) {
+    boolean switchFavorite(Long id) {
+        boolean ret = false;
         if (request.isLogin()) {
-            Member member = request.getMember();
-            Subject subject = get(id).orElse(null);
+            Subject subject = subjectRepository.findById(id).orElse(null);
             if (subject != null) {
-                member.getFavorite().add(subject);
+                if (subject.isFavorite()){
+                    subject.setFavorite(false);
+                } else {
+                    subject.setFavorite(true);
+                }
+                subjectRepository.save(subject); // 변경사항 저장
+                return subject.isFavorite();
             }
-        }
-    }
 
+        }
+        return false;
+    }
 
     // 에러 발생시 빈 리스트 반환
     List<SubjectForm> divide(Long id) {
@@ -195,6 +193,7 @@ public class SubjectService {
         subject.setExpiredDate(0);
         subject.setDepth(0);
         subject.setMember(request.getMember());
+        subject.setFavorite(false);
 
         if (id != null && subjectRepository.existsById(id)) {
             Subject parent = subjectRepository.findById(id).orElse(null);
