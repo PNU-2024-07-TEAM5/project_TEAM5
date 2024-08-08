@@ -69,8 +69,6 @@ public class MemberService {
         return RsData.of("회원정보가 수정되었습니다.".formatted(member.getUsername()), member);
     }
 
-
-
     public Optional<Member> findById(long id) {
         return memberRepository.findById(id);
     }

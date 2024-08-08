@@ -30,9 +30,6 @@ public class Member extends BaseTime {
     private String email;
     private String profileImgUrl;
 
-    /*@OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private List<Subject> Favorite;*/
-
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getAuthoritiesAsStringList()
