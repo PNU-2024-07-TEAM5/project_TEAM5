@@ -1,19 +1,21 @@
 package com.example.testAi;
 
+import com.example.testAi.user.global.rp.Rq;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class MainController {
+    private final Rq request;
 
     @GetMapping("/")
     public String root() {
+        if (request.isLogin()) {
+            return "redirect:/subject/main";
+        }
         return "start";
-    }
-
-    @GetMapping("/todo")
-    public String test() {
-        return "redirect:/subject/main";
     }
 
     @GetMapping("/login")
@@ -28,4 +30,5 @@ public class MainController {
 
     @GetMapping("/login/sucess")
     public String sucess() { return "redirect:/subject/main"; }
+
 }

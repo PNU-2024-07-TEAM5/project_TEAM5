@@ -1,4 +1,4 @@
-package com.example.testAi.User.standard.dto;
+package com.example.testAi.user.standard.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

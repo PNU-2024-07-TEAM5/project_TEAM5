@@ -1,4 +1,4 @@
-package com.example.testAi.User.standard.dto;
+package com.example.testAi.user.standard.dto;
 
 public class Empty {
 }

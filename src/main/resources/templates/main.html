@@ -5,14 +5,12 @@
 
 <th:block layout:fragment="head">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script th:src="@{/js/popup.js}"></script>
     <script th:src="@{/js/todo.js}"></script>
-    <script th:src="@{/js/favorite.js}"></script>
-    <link rel="stylesheet" th:href="@{/css/favorite.css}">
-
+    <script th:if="${param.taskSort == null or param.taskSort[0] != 'favorite'}" th:src="@{/js/favorite.js}"></script>
+    <script th:if="${param.taskSort != null and param.taskSort[0] == 'favorite'}" th:src="@{/js/favorite-list.js}"></script>
 </th:block>
+
 
 <div layout:fragment="content">
 
@@ -31,6 +29,7 @@
 
             <div class="flex items-center">
 
+
                 <form th:action="@{/subject/main}" id="sortForm" method="get">
                     <select class="bg-gray-300 px-1 py-1 rounded" name="taskSort" onchange="onChangeSort()">
                         <option value="recent"
@@ -46,7 +45,6 @@
                                 th:selected="${param.taskSort != null and param.taskSort[0] == 'done'}">완료된 할 일
                         </option>
                     </select>
-
                 </form>
 
                 <th:block th:if="${param.taskSort == null or param.taskSort[0] != 'done'}">
@@ -74,7 +72,7 @@
         </th:block>
 
         <th:block th:if="${param.taskSort != null and param.taskSort[0] == 'favorite'}">
-            <th:block th:replace="~{fragments/favoriteList}"></th:block>
+            <th:block th:replace="~{fragments/basicList}"></th:block>
         </th:block>
 
         <th:block th:if="${param.taskSort != null and param.taskSort[0] == 'tree'}">
@@ -103,20 +101,23 @@
         </div>
     </div>
 
+
     <th:block th:replace="~{fragments/popup}"></th:block>
+
     <form id="requestForm" th:action="@{/subject/main/divide}" method="post" class="hidden">
         <input type="hidden" name="id">
     </form>
     <form id="saveForm" th:action="@{/subject/main/save}" method="post" class="hidden">
         <input type="hidden" name="body">
     </form>
+
     <form id="delForm" th:action="@{/subject/main/delete}" method="post" class="hidden">
         <input type="hidden" name="body">
     </form>
     <form id="doneForm" th:action="@{/subject/main/done}" method="post" class="hidden">
         <input type="hidden" name="body">
     </form>
-</div>
 
+</div>
 
 </html>

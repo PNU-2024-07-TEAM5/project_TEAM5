@@ -1,4 +1,4 @@
-package com.example.testAi.User.standard.util;
+package com.example.testAi.user.standard.util;
 
 public class Ut {
     public static class str {

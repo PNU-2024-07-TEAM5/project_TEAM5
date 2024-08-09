@@ -2,8 +2,8 @@ package com.example.testAi.subject;
 
 
 import com.example.testAi.chat.ChatService;
-import com.example.testAi.User.domain.member.entity.Member;
-import com.example.testAi.User.global.rp.Rq;
+import com.example.testAi.user.domain.member.entity.Member;
+import com.example.testAi.user.global.rp.Rq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -40,12 +40,31 @@ public class SubjectService {
 
     List<Subject> getAllByPriority() {
         if (request.isLogin()) {
-            return subjectRepository.findAllByMemberId(Sort.by(Sort.Order.asc("priority")), request.getMember().getId())
+            List<Subject> subjects =  subjectRepository.findAllByMemberId(Sort.by(Sort.Order.asc("priority")), request.getMember().getId())
                     .stream().filter(s -> !(s.isDone())).toList();
+            int priority = 1;
+
+            for (Subject subject : subjects) {
+                subject.setPriority(priority++);
+            }
+            subjectRepository.saveAll(subjects);
+            return subjects;
         } else {
             return new ArrayList<>();
         }
     }
+
+
+    List<Subject> getFavorite() {
+        if (request.isLogin()) {
+            return subjectRepository.findAllByMemberId(Sort.by(Sort.Order.desc("createdDate"))
+                            , request.getMember().getId()).stream().filter(Subject::isFavorite).filter(s -> !(s.isDone()))
+                    .toList();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
 
     List<Subject> getRoots() {
         if (request.isLogin()) {
@@ -62,11 +81,6 @@ public class SubjectService {
         if (request.isLogin()) {
             return subjectRepository.findAllByMemberId(Sort.by(Sort.Order.desc("createdDate"))
                     , request.getMember().getId()).stream().filter(Subject::isDone).toList();
-
-          
-    List<Subject> getFavorite() {
-        if(request.isLogin()) {
-            return subjectRepository.findAllByMemberIdAndFavoriteIsTrue(request.getMember().getId());
         } else {
             return new ArrayList<>();
         }
@@ -75,30 +89,25 @@ public class SubjectService {
 
     void delFavorite(Long id) {
         if (request.isLogin()) {
-            Subject subject = subjectRepository.findById(id).orElse(null);
+            Member member = request.getMember();
+            Subject subject = get(id).orElse(null);
             if (subject != null) {
-                subject.setFavorite(false); // isFavorite 값을 false로 변경
-                subjectRepository.save(subject); // 변경사항 저장
+                member.getFavorite().remove(subject);
             }
         }
     }
-    boolean switchFavorite(Long id) {
-        boolean ret = false;
-        if (request.isLogin()) {
-            Subject subject = subjectRepository.findById(id).orElse(null);
-            if (subject != null) {
-                if (subject.isFavorite()){
-                    subject.setFavorite(false);
-                } else {
-                    subject.setFavorite(true);
-                }
-                subjectRepository.save(subject); // 변경사항 저장
-                return subject.isFavorite();
-            }
 
+
+    void addFavorite(Long id) {
+        if (request.isLogin()) {
+            Member member = request.getMember();
+            Subject subject = get(id).orElse(null);
+            if (subject != null) {
+                member.getFavorite().add(subject);
+            }
         }
-        return false;
     }
+
 
     // 에러 발생시 빈 리스트 반환
     List<SubjectForm> divide(Long id) {
@@ -186,6 +195,7 @@ public class SubjectService {
         if (!request.isLogin()) {
             return;
         }
+
         Subject subject = new Subject();
         subject.setSubject(content);
         subject.setDescription("사용자가 직접 입력한 내용입니다.");
@@ -193,13 +203,14 @@ public class SubjectService {
         subject.setExpiredDate(0);
         subject.setDepth(0);
         subject.setMember(request.getMember());
-        subject.setFavorite(false);
 
         if (id != null && subjectRepository.existsById(id)) {
             Subject parent = subjectRepository.findById(id).orElse(null);
             subject.setParent(parent);
             parent.getChildren().add(subject);
             subject.setDepth(parent.getDepth() + 1);
+            int priority = parent.getChildren().size();
+            subject.setPriority(priority);
             subjectRepository.save(parent);
         }
 
@@ -209,7 +220,10 @@ public class SubjectService {
     void done(Long id) {
         if (request.isLogin()) {
             Subject subject = get(id).orElse(null);
+
             if (subject != null && !subject.isDone()) {
+                subject.setDone(true);
+                subjectRepository.save(subject);
                 Subject parent = subject;
                 int expDate = subject.getExpiredDate();
                 while (parent != null) {
@@ -217,16 +231,18 @@ public class SubjectService {
                     subjectRepository.save(parent);
                     parent = parent.getParent();
                 }
+                if (subject.getParent() != null) {
+                    subject.getParent().getChildren().remove(subject);
+                    subjectRepository.save(subject.getParent());
+                }
+                doneChlidren(subject);
             }
-            subject.setDone(true);
-            subjectRepository.save(subject);
-            doneChlidren(subject);
         }
     }
     private void doneChlidren(Subject subject) {
-        subject.setParent(null);
 
         if (subject.getChildren().isEmpty()) {
+        subject.setParent(null);
             return;
         }
         for (Subject child : subject.getChildren()) {
@@ -236,5 +252,43 @@ public class SubjectService {
         }
         subject.children.clear();
         subjectRepository.save(subject);
+    }
+
+
+    boolean switchFavorite(Long id) {
+        if (request.isLogin()) {
+            Subject subject = get(id).orElse(null);
+            if (subject != null) {
+                subject.setFavorite(!subject.isFavorite());
+                subjectRepository.save(subject);
+                return subject.isFavorite();
+            }
+        }
+        return false;
+    }
+
+    void modify (Long id, Integer expiredDate ,Integer priority) {
+        if (request.isLogin()) {
+            Subject subject = get(id).orElse(null);
+            if (subject != null) {
+                subject.setExpiredDate(expiredDate);
+                subject.setPriority(priority);
+                subjectRepository.save(subject);
+            }
+        }
+    }
+
+    void setParentExpiredDate(Long pid, Integer totalExpiredDate) {
+        if (request.isLogin()) {
+            Subject parent = get(pid).orElse(null);
+            if (parent != null) {
+                Integer diff = totalExpiredDate - parent.getExpiredDate();
+                while (parent != null) {
+                    parent.setExpiredDate(parent.getExpiredDate() + diff);
+                    subjectRepository.save(parent);
+                    parent = parent.getParent();
+                }
+            }
+        }
     }
 }
